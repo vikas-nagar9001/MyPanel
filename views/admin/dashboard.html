@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Bazaar Verse</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a1c23;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .sidebar {
+            background: #262932;
+            min-height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-brand {
+            padding: 20px;
+            border-bottom: 1px solid #3a3d47;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #fff;
+        }
+        
+        .sidebar-brand:hover {
+            color: #fff;
+        }
+        
+        .sidebar-brand .logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #dc3545 0%, #6f42c1 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+        }
+        
+        .sidebar-nav {
+            padding: 20px 0;
+        }
+        
+        .nav-item {
+            margin-bottom: 8px;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: #8b92a7;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: #fff;
+            background: rgba(220, 53, 69, 0.1);
+            border-left-color: #dc3545;
+        }
+        
+        .nav-link i {
+            width: 20px;
+            margin-right: 12px;
+            font-size: 18px;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            padding: 30px;
+            transition: margin-left 0.3s ease;
+        }
+        
+        .top-bar {
+            background: #262932;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+        
+        .admin-badge {
+            background: linear-gradient(135deg, #dc3545 0%, #6f42c1 100%);
+            border-radius: 12px;
+            padding: 12px 20px;
+            color: white;
+            margin-left: auto;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: #262932;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #3a3d47;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+        
+        .stat-icon.admin-primary {
+            background: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+        }
+        
+        .stat-icon.admin-success {
+            background: rgba(40, 199, 111, 0.2);
+            color: #28c76f;
+        }
+        
+        .stat-icon.admin-warning {
+            background: rgba(255, 159, 67, 0.2);
+            color: #ff9f43;
+        }
+        
+        .stat-icon.admin-info {
+            background: rgba(111, 66, 193, 0.2);
+            color: #6f42c1;
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+        
+        .stat-label {
+            color: #8b92a7;
+            font-size: 14px;
+        }
+        
+        .content-card {
+            background: #262932;
+            border-radius: 12px;
+            border: 1px solid #3a3d47;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            padding: 20px;
+            border-bottom: 1px solid #3a3d47;
+            background: transparent;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        .table {
+            background: transparent;
+            color: #fff;
+        }
+        
+        .table thead th {
+            background: #1a1c23;
+            color: #fff;
+            border-bottom: 1px solid #3a3d47;
+            border-top: none;
+        }
+        
+        .table tbody td {
+            border-bottom: 1px solid #3a3d47;
+            border-top: none;
+        }
+        
+        .table tbody tr:hover {
+            background: rgba(220, 53, 69, 0.1);
+        }
+        
+        .btn-admin {
+            background: linear-gradient(135deg, #dc3545 0%, #6f42c1 100%);
+            border: none;
+            color: white;
+            border-radius: 8px;
+        }
+        
+        .btn-admin:hover {
+            background: linear-gradient(135deg, #c82333 0%, #5a2d91 100%);
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 0;
+                overflow: hidden;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .sidebar.show {
+                width: 280px;
+            }
+        }
+        
+        .mobile-toggle {
+            display: none;
+            background: #262932;
+            border: none;
+            color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-toggle {
+                display: block;
+            }
+        }
+        
+        .recent-activity {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Toggle Button -->
+    <button class="mobile-toggle" id="mobileToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <a href="/admin/dashboard" class="sidebar-brand">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <div>
+                <div style="font-weight: 600; font-size: 18px;">ADMIN PANEL</div>
+                <div style="font-size: 12px; color: #8b92a7;">Management</div>
+            </div>
+        </a>
+        
+        <nav class="sidebar-nav">
+            <div class="nav-item">
+                <a href="/admin/dashboard" class="nav-link active">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="/admin/users" class="nav-link">
+                    <i class="fas fa-users"></i>
+                    <span>User Management</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </nav>
+        
+        <!-- Admin Badge in Sidebar -->
+        <div style="position: absolute; bottom: 20px; left: 20px; right: 20px;">
+            <div class="admin-badge">
+                <i class="fas fa-crown"></i>
+                <span>Administrator</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div>
+                <h4 class="mb-1">
+                    <i class="fas fa-shield-alt me-2"></i>Admin Dashboard
+                </h4>
+                <p class="mb-0" style="color: #8b92a7;">Monitor and manage the Bazaar Verse OTP system</p>
+            </div>
+        </div>
+
+        <!-- Statistics Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon admin-primary">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-number" id="totalUsers">0</div>
+                <div class="stat-label">Total Users</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon admin-success">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <div class="stat-number" id="totalNumbers">0</div>
+                <div class="stat-label">Total Numbers</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon admin-warning">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="stat-number">₹<span id="totalRevenue">0</span></div>
+                <div class="stat-label">Total Revenue</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon admin-info">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="stat-number" id="successRate">0%</div>
+                <div class="stat-label">Success Rate</div>
+            </div>
+        </div>
+
+        <!-- Admin Content Cards -->
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="content-card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-chart-bar me-2"></i>Recent Activity
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="recentActivity">
+                            <div class="text-center py-4">
+                                <i class="fas fa-spinner fa-spin fa-2x" style="color: #8b92a7;"></i>
+                                <p style="color: #8b92a7; margin-top: 16px;">Loading recent activity...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 mb-4">
+                <div class="content-card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-user-plus me-2"></i>Recent Users
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="recentUsers">
+                            <div class="text-center py-4">
+                                <i class="fas fa-spinner fa-spin fa-2x" style="color: #8b92a7;"></i>
+                                <p style="color: #8b92a7; margin-top: 16px;">Loading users...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+                <div class="card stat-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-mobile-alt stat-icon"></i>
+                        <h3 class="mt-2 mb-1" id="totalNumbers">0</h3>
+                        <p class="mb-0">Total Numbers</p>
+                        <small class="text-light">
+                            <i class="fas fa-check me-1"></i><span id="successfulNumbers">0</span> Successful
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card stat-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-rupee-sign stat-icon"></i>
+                        <h3 class="mt-2 mb-1">₹<span id="totalRevenue">0</span></h3>
+                        <p class="mb-0">Total Revenue</p>
+                        <small class="text-light">
+                            <i class="fas fa-chart-line me-1"></i>From successful orders
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card stat-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-percentage stat-icon"></i>
+                        <h3 class="mt-2 mb-1"><span id="successRate">0</span>%</h3>
+                        <p class="mb-0">Success Rate</p>
+                        <small class="text-light">
+                            <i class="fas fa-clock me-1"></i><span id="pendingNumbers">0</span> Pending
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts and Activity -->
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-chart-bar me-2"></i>System Overview
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <h6>User Statistics</h6>
+                                <div class="progress mb-2">
+                                    <div class="progress-bar bg-success" role="progressbar" 
+                                         style="width: 0%" id="activeUsersProgress">
+                                    </div>
+                                </div>
+                                <small class="text-muted">Active vs Total Users</small>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <h6>Number Success Rate</h6>
+                                <div class="progress mb-2">
+                                    <div class="progress-bar bg-info" role="progressbar" 
+                                         style="width: 0%" id="successRateProgress">
+                                    </div>
+                                </div>
+                                <small class="text-muted">Successful vs Total Numbers</small>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-4">
+                            <div class="col-md-4 text-center">
+                                <h5 class="text-success" id="successCount">0</h5>
+                                <small class="text-muted">Successful</small>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <h5 class="text-warning" id="pendingCount">0</h5>
+                                <small class="text-muted">Pending</small>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <h5 class="text-danger" id="cancelledCount">0</h5>
+                                <small class="text-muted">Cancelled</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-clock me-2"></i>Recent Activity
+                        </h5>
+                    </div>
+                    <div class="card-body recent-activity" id="recentActivity">
+                        <div class="text-center py-4">
+                            <i class="fas fa-spinner fa-spin fa-2x text-muted"></i>
+                            <p class="text-muted mt-2">Loading activity...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-bolt me-2"></i>Quick Actions
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3 mb-2">
+                                <a href="/admin/users" class="btn btn-outline-primary w-100">
+                                    <i class="fas fa-user-plus me-2"></i>Add New User
+                                </a>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <button class="btn btn-outline-info w-100" onclick="refreshData()">
+                                    <i class="fas fa-sync me-2"></i>Refresh Data
+                                </button>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <a href="/admin/users?filter=inactive" class="btn btn-outline-warning w-100">
+                                    <i class="fas fa-user-times me-2"></i>Inactive Users
+                                </a>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <button class="btn btn-outline-success w-100" onclick="exportData()">
+                                    <i class="fas fa-download me-2"></i>Export Data
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Sidebar toggle for mobile
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('show');
+        }
+        // Add event listener for CSP compliance
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileToggle = document.getElementById('mobileToggle');
+            if (mobileToggle) {
+                mobileToggle.addEventListener('click', toggleSidebar);
+            }
+        });
+
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                const response = await fetch('/admin/api/dashboard-data');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const { userStats, numberStats, revenue, recentActivity } = data.data;
+                    
+                    // Update user statistics
+                    document.getElementById('totalUsers').textContent = userStats.total;
+                    
+                    // Update number statistics
+                    document.getElementById('totalNumbers').textContent = numberStats.total;
+                    document.getElementById('successRate').textContent = numberStats.successRate + '%';
+                    
+                    // Update revenue
+                    document.getElementById('totalRevenue').textContent = revenue.total.toFixed(2);
+                    document.getElementById('totalRevenue').textContent = revenue.total.toFixed(2);
+                    
+                    // Update progress bars
+                    const activeUsersPercent = userStats.total > 0 ? (userStats.active / userStats.total) * 100 : 0;
+                    document.getElementById('activeUsersProgress').style.width = activeUsersPercent + '%';
+                    document.getElementById('activeUsersProgress').textContent = Math.round(activeUsersPercent) + '%';
+                    
+                    const successRatePercent = parseFloat(numberStats.successRate);
+                    document.getElementById('successRateProgress').style.width = successRatePercent + '%';
+                    document.getElementById('successRateProgress').textContent = successRatePercent + '%';
+                    
+                    // Update counts
+                    document.getElementById('successCount').textContent = numberStats.successful;
+                    document.getElementById('pendingCount').textContent = numberStats.pending;
+                    document.getElementById('cancelledCount').textContent = numberStats.cancelled;
+                    
+                    // Update recent activity
+                    displayRecentActivity(recentActivity);
+                } else {
+                    console.error('Failed to load dashboard data:', data.message);
+                }
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+            }
+        }
+        
+        function displayRecentActivity(activities) {
+            const container = document.getElementById('recentActivity');
+            
+            if (activities.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-4">
+                        <i class="fas fa-inbox fa-2x text-muted"></i>
+                        <p class="text-muted mt-2">No recent activity</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = activities.map(activity => {
+                const statusClass = getStatusClass(activity.status);
+                const statusIcon = getStatusIcon(activity.status);
+                const date = new Date(activity.purchasedAt).toLocaleDateString();
+                const time = new Date(activity.purchasedAt).toLocaleTimeString();
+                
+                return `
+                    <div class="activity-item">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6 class="mb-1">${activity.userId?.username || 'Unknown User'}</h6>
+                                <p class="text-muted mb-1">
+                                    <i class="fas fa-mobile me-1"></i>${activity.phoneNumber}
+                                </p>
+                                <small class="text-muted">${activity.serviceName}</small>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge ${statusClass} mb-1">
+                                    <i class="${statusIcon} me-1"></i>${activity.status}
+                                </span>
+                                <br>
+                                <small class="text-muted">${date}</small>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function getStatusClass(status) {
+            switch (status) {
+                case 'RECEIVED': return 'bg-success';
+                case 'WAITING': return 'bg-warning';
+                case 'CANCELLED': return 'bg-danger';
+                default: return 'bg-secondary';
+            }
+        }
+        
+        function getStatusIcon(status) {
+            switch (status) {
+                case 'RECEIVED': return 'fas fa-check';
+                case 'WAITING': return 'fas fa-clock';
+                case 'CANCELLED': return 'fas fa-times';
+                default: return 'fas fa-question';
+            }
+        }
+        
+        function refreshData() {
+            loadDashboardData();
+        }
+        
+        function exportData() {
+            // Placeholder for export functionality
+            alert('Export functionality coming soon!');
+        }
+        
+        async function logout() {
+            try {
+                const response = await fetch('/auth/logout', { method: 'POST' });
+                const data = await response.json();
+                
+                if (data.success) {
+                    window.location.href = '/login';
+                }
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        }
+        
+        // Load data on page load
+        loadDashboardData();
+        
+        // Refresh data every 30 seconds
+        setInterval(loadDashboardData, 30000);
+    </script>
+</body>
+</html>

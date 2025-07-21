@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Number - Bazaar Verse</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a1c23;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .sidebar {
+            background: linear-gradient(135deg, #23242b 60%, #2d2f3a 100%);
+            height: 100vh;
+            min-height: 100vh;
+            max-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: 4px 0 24px 0 rgba(102,126,234,0.10), 2px 0 10px rgba(0,0,0,0.15);
+            border-right: 1.5px solid #35384a;
+        }
+
+        .sidebar-brand {
+            padding: 20px;
+            border-bottom: 1px solid #3a3d47;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .sidebar-brand:hover {
+            color: #fff;
+        }
+
+        .sidebar-brand .logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            box-shadow: 0 2px 8px rgba(102,126,234,0.2);
+        }
+
+        .sidebar-nav {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            margin-bottom: 8px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 13px 22px 13px 22px;
+            color: #bfc7e0;
+            text-decoration: none;
+            transition: all 0.2s cubic-bezier(.4,0,.2,1);
+            border-left: 3px solid transparent;
+            border-radius: 10px 0 0 10px;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+            position: relative;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #fff;
+            background: linear-gradient(90deg, rgba(102,126,234,0.13) 0%, rgba(118,75,162,0.10) 100%);
+            border-left-color: #667eea;
+            box-shadow: 0 2px 12px rgba(102,126,234,0.10);
+        }
+
+        .nav-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            bottom: 8px;
+            width: 4px;
+            border-radius: 4px;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .nav-link i {
+            width: 22px;
+            margin-right: 14px;
+            font-size: 20px;
+            color: #667eea;
+            transition: color 0.2s;
+        }
+
+        .nav-link.active i, .nav-link:hover i {
+            color: #fff;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 30px 10px 30px 10px;
+            transition: margin-left 0.3s ease;
+            min-height: 100vh;
+        }
+
+        .content-card {
+            background: #23242b;
+            border-radius: 14px;
+            border: 1px solid #35384a;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(102,126,234,0.07);
+            margin-bottom: 18px;
+        }
+
+        .card-header {
+            padding: 14px 18px 10px 18px;
+            border-bottom: 1px solid #35384a;
+            background: #23242b;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #fff;
+            letter-spacing: 0.01em;
+        }
+
+        .card-body {
+            padding: 14px 12px 10px 12px;
+        }
+
+        .step-card.card {
+            background: #23242b;
+            border: 1px solid #35384a;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 4px rgba(102,126,234,0.04);
+        }
+
+        .step-card .card-title {
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: #bfc7e0;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .form-select, .form-control {
+            min-height: 38px;
+            font-size: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 0;
+            font-weight: 600;
+            font-size: 1rem;
+            box-shadow: 0 2px 8px rgba(102,126,234,0.10);
+        }
+
+        .btn-primary:disabled {
+            background: linear-gradient(135deg, #6b6b6b 0%, #888 100%);
+            color: #e0e0e0;
+        }
+
+        .pricing-info {
+            font-size: 1rem;
+        }
+
+        .badge.bg-info {
+            background: #667eea !important;
+            color: #fff !important;
+            font-size: 0.95em;
+            padding: 0.4em 0.7em;
+            border-radius: 6px;
+        }
+
+        /* Compact purchased number card for mobile */
+        @media (max-width: 768px) {
+            .content-card, .step-card.card {
+                border-radius: 8px;
+                padding: 6px 2px;
+            }
+            .card-header, .card-body {
+                padding: 10px 4px 8px 4px;
+            }
+            .step-card .card-title {
+                font-size: 1rem;
+            }
+            .form-select, .form-control {
+                font-size: 0.98rem;
+                border-radius: 6px;
+            }
+            .btn-primary {
+                font-size: 0.98rem;
+                border-radius: 6px;
+            }
+        }
+
+        .form-control, .form-select {
+            background: #1a1c23;
+            border: 1px solid #3a3d47;
+            color: #fff;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background: #1a1c23;
+            border-color: #667eea;
+            color: #fff;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+
+        .form-select option {
+            background: #262932;
+            color: #fff;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 24px;
+            font-weight: 600;
+            font-size: 1rem;
+            box-shadow: 0 2px 8px rgba(102,126,234,0.10);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+            box-shadow: 0 4px 16px rgba(102,126,234,0.15);
+        }
+
+        .btn-danger {
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .btn-outline-secondary {
+            border-radius: 10px;
+        }
+
+        .balance-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            padding: 20px;
+            color: white;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(102,126,234,0.10);
+        }
+
+        .alert {
+            border-radius: 10px;
+            border: none;
+        }
+
+        .alert-success {
+            background: rgba(40, 199, 111, 0.2);
+            color: #28c76f;
+            border: 1px solid rgba(40, 199, 111, 0.3);
+        }
+
+        .alert-danger {
+            background: rgba(234, 84, 85, 0.2);
+            color: #ea5455;
+            border: 1px solid rgba(234, 84, 85, 0.3);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1200px) {
+            .main-content {
+                padding: 20px 2vw 20px 2vw;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .main-content {
+                margin-left: 0;
+                padding: 16px 2vw 16px 2vw;
+            }
+            .sidebar {
+                width: 220px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 0;
+                overflow: hidden;
+                min-height: 0;
+                height: 100vh;
+                max-height: 100vh;
+                position: fixed;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                background: linear-gradient(135deg, #23242b 60%, #2d2f3a 100%);
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 10px 2vw 10px 2vw;
+            }
+            .sidebar.show {
+                width: 80vw;
+                min-width: 180px;
+                max-width: 320px;
+                z-index: 1002;
+                box-shadow: 2px 0 10px rgba(0,0,0,0.25);
+            }
+            .content-card, .balance-card {
+                border-radius: 12px;
+                padding: 12px;
+            }
+            .card-header, .card-body {
+                padding: 12px 8px;
+            }
+            .step-card.card {
+                margin-bottom: 12px;
+            }
+            .btn-primary, .btn-danger, .btn-outline-secondary {
+                padding: 10px 12px;
+                font-size: 0.95rem;
+            }
+            .d-grid.gap-2.d-md-flex {
+                flex-direction: column !important;
+                gap: 8px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 4px 1vw 4px 1vw;
+            }
+            .content-card, .balance-card {
+                border-radius: 8px;
+                padding: 6px;
+            }
+            .card-header, .card-body {
+                padding: 8px 2px;
+            }
+            .form-control, .form-select {
+                font-size: 0.95rem;
+                border-radius: 7px;
+            }
+            .btn-primary, .btn-danger, .btn-outline-secondary {
+                font-size: 0.92rem;
+                border-radius: 7px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Toggle Button -->
+    <button class="mobile-toggle" id="mobileToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand" style="z-index:2;">
+            <div class="logo">
+                <i class="fas fa-mobile-alt"></i>
+            </div>
+            <div>
+                <div style="font-weight: 600; font-size: 18px;">Bazaar Verse</div>
+                <div style="font-size: 12px; color: #8b92a7;">Dashboard</div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <ul style="list-style:none; padding:0; margin:0;">
+                <li class="nav-item">
+                    <a href="/user/dashboard" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/user/buy-number" class="nav-link active">
+                        <i class="fas fa-mobile-alt"></i>
+                        <span>Get Number</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/user/history" class="nav-link">
+                        <i class="fas fa-history"></i>
+                        <span>Number History</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div style="margin-top:auto; padding: 0 20px 20px 20px; width:100%;">
+            <div class="balance-card" style="z-index:2;">
+                <div style="font-size: 14px; margin-bottom: 8px; opacity: 0.9;">Balance</div>
+                <div style="font-size: 24px; font-weight: 700;">₹<span id="currentBalance">0.00</span></div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div id="alertContainer" style="margin-bottom: 20px;"></div>
+
+        <!-- Purchase Form -->
+        <div class="content-card">
+
+        <div class="card-header">
+            <i class="fas fa-mobile-alt me-2"></i>Get Number
+        </div>
+        <div class="card-body">
+            <form id="purchaseForm">
+                <!-- Step 1: Server Selection -->
+                <div class="step-card card mb-2">
+                    <div class="card-body py-2 px-2">
+                        <div class="card-title mb-2"><i class="fas fa-server me-2"></i>Step 1: Select Server</div>
+                        <select class="form-select" id="serverSelect" required>
+                            <option value="">Loading servers...</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- Step 2: Country Selection -->
+                <div class="step-card card mb-2">
+                    <div class="card-body py-2 px-2">
+                        <div class="card-title mb-2"><i class="fas fa-globe me-2"></i>Step 2: Select Country</div>
+                        <select class="form-select" id="countrySelect" required disabled>
+                            <option value="">Select a server first</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- Step 3: Service Selection -->
+                <div class="step-card card mb-2">
+                    <div class="card-body py-2 px-2">
+                        <div class="card-title mb-2"><i class="fas fa-cogs me-2"></i>Step 3: Select Service</div>
+                        <select class="form-select" id="serviceSelect" required disabled>
+                            <option value="">Select a country first</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- Step 4: Pricing & Purchase -->
+                <div class="step-card card mb-2">
+                    <div class="card-body py-2 px-2">
+                        <div class="card-title mb-2" style="color:#fff;"><i class="fas fa-credit-card me-2"></i>Step 4: Pricing & Purchase</div>
+                        <div class="row g-2 align-items-end" style="color:#fff;">
+                            <div class="col-7 col-md-6">
+                                <div class="pricing-info" style="color:#fff;">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span style="color:#fff;">Service Cost:</span>
+                                        <span class="fw-bold" id="serviceCost" style="color:#fff;">₹ --</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span style="color:#fff;">Available Count:</span>
+                                        <span class="badge bg-info" id="availableCount" style="color:#fff;">--</span>
+                                    </div>
+                                    <div id="priceLoadingIndicator" class="text-center py-1" style="display: none; color:#fff;">
+                                        <i class="fas fa-spinner fa-spin" style="color:#fff;"></i>
+                                        <small class="ms-2" style="color:#fff;">Loading prices...</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-5 col-md-6">
+                                <button type="submit" class="btn btn-primary w-100" id="purchaseBtn" disabled>
+                                    <i class="fas fa-shopping-cart me-2"></i>Purchase Number
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Purchased Numbers Container -->
+        <div style="margin-top: 30px;">
+            <div id="purchasedNumbersContainer"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SMS Received Modal -->
+    <div class="modal fade" id="smsReceivedModal" tabindex="-1" aria-labelledby="smsReceivedModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background:#23242b; color:#fff; border-radius:14px;">
+          <div class="modal-header border-0">
+            <h5 class="modal-title" id="smsReceivedModalLabel"><i class="fas fa-sms me-2 text-success"></i>SMS Received</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-center">
+            <div style="font-size:1.1rem; margin-bottom:10px;">Your OTP has arrived!</div>
+            <div style="font-size:1.2rem; margin-bottom:8px;"><strong>Number:</strong> <span id="modalPhoneNumber"></span></div>
+            <div style="font-size:1.5rem; font-weight:700; color:#28c76f;"><strong>OTP:</strong> <span id="modalOtpCode"></span></div>
+          </div>
+          <div class="modal-footer border-0 justify-content-center">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+        // Sidebar toggle for mobile
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('show');
+        }
+        // Add event listener for CSP compliance
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileToggle = document.getElementById('mobileToggle');
+            if (mobileToggle) {
+                mobileToggle.addEventListener('click', toggleSidebar);
+            }
+        });
+
+        let servers = {};
+        let countries = {};
+        let services = {};
+
+        // Load user balance
+        async function loadBalance() {
+            try {
+                const response = await fetch('/user/api/dashboard-data');
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('currentBalance').textContent = data.data.user.balance.toFixed(2);
+                }
+            } catch (error) {
+                console.error('Error loading balance:', error);
+            }
+        }
+
+        // Load servers
+        async function loadServers() {
+            try {
+                const response = await fetch('/api/servers');
+                const data = await response.json();
+                
+                if (data.success) {
+                    servers = data.data;
+                    const serverSelect = document.getElementById('serverSelect');
+                    serverSelect.innerHTML = '<option value="">Select a server</option>';
+                    
+                    Object.entries(servers).forEach(([name, id]) => {
+                        const option = document.createElement('option');
+                        option.value = id;
+                        option.textContent = name;
+                        option.dataset.name = name;
+                        serverSelect.appendChild(option);
+                    });
+                } else {
+                    showAlert('error', 'Failed to load servers: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error loading servers:', error);
+                showAlert('error', 'Failed to load servers');
+            }
+        }
+
+        // Load countries
+        async function loadCountries(serverId) {
+            try {
+                const countrySelect = document.getElementById('countrySelect');
+                countrySelect.innerHTML = '<option value="">Loading countries...</option>';
+                countrySelect.disabled = true;
+                
+                const response = await fetch(`/api/countries?server_id=${serverId}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    countries = data.data;
+                    countrySelect.innerHTML = '<option value="">Select a country</option>';
+                    
+                    Object.entries(countries).forEach(([id, name]) => {
+                        const option = document.createElement('option');
+                        option.value = id;
+                        option.textContent = name.charAt(0).toUpperCase() + name.slice(1);
+                        option.dataset.name = name;
+                        countrySelect.appendChild(option);
+                    });
+                    
+                    countrySelect.disabled = false;
+                } else {
+                    countrySelect.innerHTML = '<option value="">Error loading countries</option>';
+                    showAlert('error', 'Failed to load countries: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error loading countries:', error);
+                showAlert('error', 'Failed to load countries');
+            }
+        }
+
+        // Load prices
+        async function loadPrices(serverId, countryId, selectedService = null) {
+            try {
+                document.getElementById('priceLoadingIndicator').style.display = 'block';
+                
+                const response = await fetch(`/api/prices?server_id=${serverId}&country=${countryId}`);
+                const data = await response.json();
+                
+                if (data.success && data.data[countryId]) {
+                    const countryPrices = data.data[countryId];
+                    
+                    if (selectedService && countryPrices[selectedService]) {
+                        const servicePrices = countryPrices[selectedService];
+                        const priceKeys = Object.keys(servicePrices);
+                        
+                        if (priceKeys.length > 0) {
+                            const price = priceKeys[0];
+                            const count = servicePrices[price];
+                            
+                            document.getElementById('serviceCost').textContent = `₹${parseFloat(price).toFixed(2)}`;
+                            document.getElementById('availableCount').textContent = count;
+                        } else {
+                            document.getElementById('serviceCost').textContent = '₹ N/A';
+                            document.getElementById('availableCount').textContent = '0';
+                        }
+                    } else {
+                        document.getElementById('serviceCost').textContent = '₹ --';
+                        document.getElementById('availableCount').textContent = '--';
+                    }
+                } else {
+                    document.getElementById('serviceCost').textContent = '₹ N/A';
+                    document.getElementById('availableCount').textContent = 'N/A';
+                }
+            } catch (error) {
+                console.error('Error loading prices:', error);
+                document.getElementById('serviceCost').textContent = '₹ Error';
+                document.getElementById('availableCount').textContent = 'Error';
+            } finally {
+                document.getElementById('priceLoadingIndicator').style.display = 'none';
+            }
+        }
+
+        // Load services
+        async function loadServices(serverId, countryId) {
+            try {
+                const serviceSelect = document.getElementById('serviceSelect');
+                serviceSelect.innerHTML = '<option value="">Loading services...</option>';
+                serviceSelect.disabled = true;
+                
+                // Reset pricing display
+                document.getElementById('serviceCost').textContent = '₹ --';
+                document.getElementById('availableCount').textContent = '--';
+                
+                const response = await fetch(`/api/services?server_id=${serverId}&country=${countryId}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    services = data.data;
+                    serviceSelect.innerHTML = '<option value="">Select a service</option>';
+                    
+                    Object.entries(services).forEach(([id, name]) => {
+                        const option = document.createElement('option');
+                        option.value = id;
+                        option.textContent = name.trim();
+                        option.dataset.name = name.trim();
+                        serviceSelect.appendChild(option);
+                    });
+                    
+                    serviceSelect.disabled = false;
+                    // Load prices for this country
+                    loadPrices(serverId, countryId);
+                } else {
+                    serviceSelect.innerHTML = '<option value="">Error loading services</option>';
+                    showAlert('error', 'Failed to load services: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error loading services:', error);
+                showAlert('error', 'Failed to load services');
+            }
+        }
+
+        // Event listeners
+        document.getElementById('serverSelect').addEventListener('change', function(e) {
+            const serverId = e.target.value;
+            const countrySelect = document.getElementById('countrySelect');
+            const serviceSelect = document.getElementById('serviceSelect');
+            
+            // Reset dependent selects
+            countrySelect.innerHTML = '<option value="">Select a country</option>';
+            countrySelect.disabled = true;
+            serviceSelect.innerHTML = '<option value="">Select a country first</option>';
+            serviceSelect.disabled = true;
+            document.getElementById('purchaseBtn').disabled = true;
+            
+            if (serverId) {
+                loadCountries(serverId);
+            }
+        });
+
+        document.getElementById('countrySelect').addEventListener('change', function(e) {
+            const countryId = e.target.value;
+            const serverId = document.getElementById('serverSelect').value;
+            const serviceSelect = document.getElementById('serviceSelect');
+            
+            // Reset service select
+            serviceSelect.innerHTML = '<option value="">Select a service</option>';
+            serviceSelect.disabled = true;
+            document.getElementById('purchaseBtn').disabled = true;
+            
+            // Reset pricing display
+            document.getElementById('serviceCost').textContent = '₹ --';
+            document.getElementById('availableCount').textContent = '--';
+            
+            if (countryId && serverId) {
+                loadServices(serverId, countryId);
+            }
+        });
+
+        document.getElementById('serviceSelect').addEventListener('change', function(e) {
+            const serviceId = e.target.value;
+            const countryId = document.getElementById('countrySelect').value;
+            const serverId = document.getElementById('serverSelect').value;
+            
+            if (serviceId && countryId && serverId) {
+                // Show the purchase form
+                document.getElementById('purchaseForm').style.display = 'block';
+                document.getElementById('purchaseBtn').disabled = false;
+                
+                // Load and show pricing for this specific service
+                loadPrices(serverId, countryId, serviceId);
+            } else {
+                document.getElementById('purchaseForm').style.display = 'none';
+                document.getElementById('purchaseBtn').disabled = true;
+                // Reset pricing display
+                document.getElementById('serviceCost').textContent = '₹ --';
+                document.getElementById('availableCount').textContent = '--';
+            }
+        });
+
+        // Purchase form submission
+        document.getElementById('purchaseForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const serverSelect = document.getElementById('serverSelect');
+            const countrySelect = document.getElementById('countrySelect');
+            const serviceSelect = document.getElementById('serviceSelect');
+            
+            // Get cost from the display element instead of manual input
+            const costText = document.getElementById('serviceCost').textContent;
+            const cost = parseFloat(costText.replace('₹', '').replace('₹', '').trim());
+            
+            const purchaseBtn = document.getElementById('purchaseBtn');
+            
+            if (!serverSelect.value || !countrySelect.value || !serviceSelect.value) {
+                showAlert('error', 'Please select all required fields');
+                return;
+            }
+            
+            if (isNaN(cost) || cost <= 0) {
+                showAlert('error', 'Unable to determine service cost. Please try again.');
+                return;
+            }
+            
+            // Show loading state
+            purchaseBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Purchasing...';
+            purchaseBtn.disabled = true;
+            
+            try {
+                const response = await fetch('/api/buy-number', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        service: serviceSelect.value,
+                        service_name: serviceSelect.options[serviceSelect.selectedIndex].dataset.name,
+                        country: countrySelect.value,
+                        country_name: countrySelect.options[countrySelect.selectedIndex].dataset.name,
+                        server_id: serverSelect.value,
+                        server_name: serverSelect.options[serverSelect.selectedIndex].dataset.name,
+                        cost: cost
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Update balance
+                    document.getElementById('currentBalance').textContent = data.data.remainingBalance.toFixed(2);
+                    
+                    // Create purchased number div
+                    createPurchasedNumberDiv(data.data);
+                    
+                    // Reset form for next purchase
+                    document.getElementById('purchaseForm').reset();
+                    loadServers(); // Reload to reset all selects
+                    
+                } else {
+                    showAlert('error', 'Purchase failed: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Purchase error:', error);
+                showAlert('error', 'Network error during purchase');
+            } finally {
+                purchaseBtn.innerHTML = '<i class="fas fa-shopping-cart me-2"></i>Purchase Number';
+                purchaseBtn.disabled = false;
+            }
+        });
+
+        function showAlert(type, message) {
+            const alertContainer = document.getElementById('alertContainer');
+            const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+            const icon = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
+            
+            alertContainer.innerHTML = `
+                <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
+                    <i class="${icon} me-2"></i>${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+        }
+
+        async function logout() {
+            try {
+                const response = await fetch('/auth/logout', { method: 'POST' });
+                const data = await response.json();
+                
+                if (data.success) {
+                    window.location.href = '/login';
+                }
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        }
+
+        // Copy text to clipboard
+        function copyToClipboard(text) {
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showAlert('success', 'Copied to clipboard!');
+                });
+            } else {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showAlert('success', 'Copied to clipboard!');
+            }
+        }
+
+        // Create purchased number div
+        function createPurchasedNumberDiv(data, existingCreatedAt = null) {
+            const container = document.getElementById('purchasedNumbersContainer');
+            const createdAt = existingCreatedAt ? new Date(existingCreatedAt) : new Date();
+            const timeString = createdAt.getHours().toString().padStart(2, '0') + ':' + createdAt.getMinutes().toString().padStart(2, '0');
+            
+            // Calculate time remaining (10 minutes from creation)
+            const expiryTime = new Date(createdAt.getTime() + 10 * 60 * 1000);
+            const timeRemaining = Math.max(0, expiryTime.getTime() - Date.now());
+            const minutesRemaining = Math.floor(timeRemaining / (1000 * 60));
+            const secondsRemaining = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+            
+            const numberDiv = document.createElement('div');
+            numberDiv.className = 'row justify-content-center mb-3';
+            numberDiv.id = `purchase-${data.activationId}`;
+            
+            numberDiv.innerHTML = `
+                <div class="col-md-6">
+                    <div class="card border-success">
+                        <div class="card-body">
+                            <div class="text-center mb-3">
+                                <h4 class="text-primary mb-2">${data.phoneNumber}</h4>
+                                <div class="d-flex justify-content-center gap-2">
+                                    <button class="btn btn-sm btn-outline-secondary copy-phone-btn" data-phone="${data.phoneNumber}">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-secondary copy-phone-btn" data-phone="${data.phoneNumber}">
+                                        <i class="fas fa-clone"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="row text-center mb-3">
+                                <div class="col-6">
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <i class="fas fa-shopping-basket text-danger me-2"></i>
+                                        <div>
+                                            <strong>${data.service}</strong> - ₹${data.cost.toFixed(2)}
+                                            <br>
+                                            <small class="text-muted">
+                                                <img src="https://flagcdn.com/16x12/in.png" alt="India" class="me-1">
+                                                ${data.server.toUpperCase()}
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="alert alert-secondary mb-0 py-2 status-alert" id="status-${data.activationId}">
+                                        <strong>Waiting for SMS.</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-center small text-muted mb-2">
+                                <div>Purchase time: ${timeString}</div>
+                                <div class="text-warning" id="countdown-${data.activationId}">
+                                    <i class="fas fa-clock me-1"></i>Auto-cancel in: ${minutesRemaining}m ${secondsRemaining}s
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                                <button class="btn btn-primary btn-sm buy-again-btn" type="button">
+                                    <i class="fas fa-redo me-1"></i>Buy Again
+                                </button>
+                                <button class="btn btn-danger btn-sm cancel-btn" type="button" data-activation-id="${data.activationId}">
+                                    <i class="fas fa-times me-1"></i>Cancel & Refund
+                                </button>
+                            </div>
+
+                            <div class="mt-2 p-2 bg-light rounded">
+                                <small class="text-muted">
+                                    <strong>Activation ID:</strong> ${data.activationId}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Add to top of container
+            container.insertBefore(numberDiv, container.firstChild);
+            
+            // Add event listeners for the new buttons
+            const copyBtns = numberDiv.querySelectorAll('.copy-phone-btn');
+            copyBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const phoneNumber = this.getAttribute('data-phone');
+                    copyToClipboard(phoneNumber);
+                });
+            });
+            
+            const buyAgainBtn = numberDiv.querySelector('.buy-again-btn');
+            buyAgainBtn.addEventListener('click', function() {
+                window.location.reload();
+            });
+            
+            const cancelBtn = numberDiv.querySelector('.cancel-btn');
+            cancelBtn.addEventListener('click', function() {
+                const activationId = this.getAttribute('data-activation-id');
+                console.log('Cancel button clicked for:', activationId);
+                cancelNumberWithRefund(activationId);
+            });
+            
+            // Start SMS status checking for this number
+            startSmsStatusChecking(data.activationId);
+            
+            // Start countdown timer
+            startCountdownTimer(data.activationId, expiryTime);
+        }
+        
+        // Countdown timer for auto-cancel
+        function startCountdownTimer(activationId, expiryTime) {
+            const countdownElement = document.getElementById(`countdown-${activationId}`);
+            if (!countdownElement) return;
+            
+            const countdownInterval = setInterval(() => {
+                const timeRemaining = Math.max(0, expiryTime.getTime() - Date.now());
+                const minutesRemaining = Math.floor(timeRemaining / (1000 * 60));
+                const secondsRemaining = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+                
+                if (timeRemaining <= 0) {
+                    countdownElement.innerHTML = '<i class="fas fa-clock me-1"></i>Expired - Auto-cancelling...';
+                    countdownElement.className = 'text-danger';
+                    clearInterval(countdownInterval);
+                } else {
+                    countdownElement.innerHTML = `<i class="fas fa-clock me-1"></i>Auto-cancel in: ${minutesRemaining}m ${secondsRemaining}s`;
+                    
+                    // Change color as time runs out
+                    if (timeRemaining < 2 * 60 * 1000) { // Less than 2 minutes
+                        countdownElement.className = 'text-danger';
+                    } else if (timeRemaining < 5 * 60 * 1000) { // Less than 5 minutes
+                        countdownElement.className = 'text-warning';
+                    }
+                }
+            }, 1000);
+        }
+
+        // SMS Status checking system
+        const activeCheckers = new Map(); // Track active checkers
+        
+        function startSmsStatusChecking(activationId) {
+            // Check every 10 seconds
+            const intervalId = setInterval(async () => {
+                try {
+                    const response = await fetch(`/api/sms-status/${activationId}`);
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        const statusElement = document.getElementById(`status-${activationId}`);
+                        
+                        if (data.data.status === 'RECEIVED' && data.data.otpCode) {
+                            // SMS received - show OTP and stop checking
+                            statusElement.className = 'alert alert-success mb-0 py-2';
+                            statusElement.innerHTML = `<strong>SMS: ${data.data.otpCode}</strong>`;
+
+                            // Stop checking for this number
+                            clearInterval(intervalId);
+                            activeCheckers.delete(activationId);
+
+                            // Show modal popup with number and OTP
+                            document.getElementById('modalPhoneNumber').textContent = data.data.phoneNumber;
+                            document.getElementById('modalOtpCode').textContent = data.data.otpCode;
+                            var smsModal = new bootstrap.Modal(document.getElementById('smsReceivedModal'));
+                            smsModal.show();
+
+                            // Show success alert
+                            showAlert('success', `SMS received for ${data.data.phoneNumber}: ${data.data.otpCode}`);
+                            // Disable or remove the Cancel & Refund button
+                            const cancelBtn = document.querySelector(`#purchase-${activationId} .cancel-btn`);
+                            if (cancelBtn) {
+                                cancelBtn.disabled = true;
+                                cancelBtn.classList.add('disabled');
+                                cancelBtn.innerHTML = '<i class="fas fa-ban me-1"></i>Cannot Cancel';
+                            }
+                            
+                        } else if (data.data.status === 'CANCELLED') {
+                            // Number was cancelled
+                            statusElement.className = 'alert alert-warning mb-0 py-2';
+                            statusElement.innerHTML = '<strong>Cancelled</strong>';
+                            
+                            // Stop checking
+                            clearInterval(intervalId);
+                            activeCheckers.delete(activationId);
+                            
+                        } else if (data.data.status === 'ERROR') {
+                            // Error occurred
+                            statusElement.className = 'alert alert-danger mb-0 py-2';
+                            statusElement.innerHTML = '<strong>Error</strong>';
+                            
+                            // Stop checking
+                            clearInterval(intervalId);
+                            activeCheckers.delete(activationId);
+                        }
+                        // If still WAITING, continue checking
+                    }
+                } catch (error) {
+                    console.error('SMS status check error:', error);
+                }
+            }, 10000); // Check every 10 seconds
+            
+            // Store the interval ID
+            activeCheckers.set(activationId, intervalId);
+            
+            // Auto-stop checking after 10 minutes to prevent endless checking
+            setTimeout(() => {
+                if (activeCheckers.has(activationId)) {
+                    clearInterval(intervalId);
+                    activeCheckers.delete(activationId);
+                    
+                    const statusElement = document.getElementById(`status-${activationId}`);
+                    if (statusElement && statusElement.innerHTML.includes('Waiting')) {
+                        statusElement.className = 'alert alert-warning mb-0 py-2';
+                        statusElement.innerHTML = '<strong>Timeout</strong>';
+                    }
+                }
+            }, 600000); // 10 minutes
+        }
+
+        // Cancel number function with refund
+        async function cancelNumberWithRefund(activationId) {
+            console.log('Cancel function called for activation ID:', activationId);
+            
+            try {
+                console.log('Sending cancel request...');
+                const response = await fetch(`/api/cancel-number/${activationId}`, {
+                    method: 'POST'
+                });
+                
+                console.log('Response status:', response.status);
+                const data = await response.json();
+                console.log('Response data:', data);
+                
+                if (data.success) {
+                    showAlert('success', `Number cancelled successfully! ₹${data.data.refundAmount.toFixed(2)} refunded to your account`);
+                    
+                    // Update balance display
+                    document.getElementById('currentBalance').textContent = data.data.newBalance.toFixed(2);
+                    
+                    // Update status display
+                    const statusElement = document.getElementById(`status-${activationId}`);
+                    if (statusElement) {
+                        statusElement.className = 'alert alert-warning mb-0 py-2';
+                        statusElement.innerHTML = '<strong>Cancelled & Refunded</strong>';
+                    }
+                    
+                    // Update countdown display
+                    const countdownElement = document.getElementById(`countdown-${activationId}`);
+                    if (countdownElement) {
+                        countdownElement.innerHTML = '<i class="fas fa-check me-1"></i>Refunded';
+                        countdownElement.className = 'text-success';
+                    }
+                    
+                    // Stop SMS checking for this number
+                    if (activeCheckers.has(activationId)) {
+                        clearInterval(activeCheckers.get(activationId));
+                        activeCheckers.delete(activationId);
+                    }
+                    
+                } else {
+                    showAlert('error', 'Failed to cancel: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Cancel error:', error);
+                showAlert('error', 'Network error during cancellation: ' + error.message);
+            }
+        }
+
+        // Load initial data
+        loadBalance();
+        loadServers();
+        loadActiveNumbers(); // Load existing active numbers
+        
+        // Start auto-cancel check every minute
+        setInterval(checkAndCancelExpiredNumbers, 60000);
+        
+        // Load active numbers from server
+        async function loadActiveNumbers() {
+            try {
+                const response = await fetch('/api/active-numbers');
+                const data = await response.json();
+                
+                if (data.success && data.data.length > 0) {
+                    data.data.forEach(numberRecord => {
+                        const purchaseData = {
+                            activationId: numberRecord.activationId,
+                            phoneNumber: numberRecord.phoneNumber,
+                            service: numberRecord.serviceName,
+                            server: numberRecord.serverName,
+                            cost: numberRecord.cost
+                        };
+                        createPurchasedNumberDiv(purchaseData, numberRecord.createdAt);
+                        
+                        // Start SMS checking for this number
+                        startSmsStatusChecking(numberRecord.activationId);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading active numbers:', error);
+            }
+        }
+        
+        // Check and auto-cancel expired numbers
+        async function checkAndCancelExpiredNumbers() {
+            try {
+                const response = await fetch('/api/auto-cancel-expired', {
+                    method: 'POST'
+                });
+                const data = await response.json();
+                
+                if (data.success && data.data.processedCount > 0) {
+                    showAlert('info', `Auto-cancelled ${data.data.processedCount} expired numbers and refunded amounts`);
+                    // Reload balance to show refunded amounts
+                    loadBalance();
+                }
+            } catch (error) {
+                console.error('Error checking expired numbers:', error);
+            }
+        }
+        
+        // Function to copy text to clipboard
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                showAlert('success', 'Phone number copied to clipboard!');
+            }).catch(function(err) {
+                console.error('Failed to copy text: ', err);
+                showAlert('error', 'Failed to copy to clipboard');
+            });
+        }
+    </script>
+</body>
+</html>

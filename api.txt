@@ -1,0 +1,194 @@
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+GET SERVERS
+
+Request -> GET
+https://api.otpbuddy.com/stubs/handler_api.php?api_key=$api_key&action=getServers
+
+Parameters :
+
+api_key : Your API Key
+
+RESPONSE 
+{
+    "INDIAN SERVER 1 🇮🇳": "1",
+    "INDIAN SERVER 2 🇮🇳": "2",
+    "INDIAN SERVER 3 🇮🇳": "3",
+    "INDIAN SERVER 4 🇮🇳": "4",
+    "INDIAN SERVER 5 🇮🇳": "5",
+    "INDIAN SERVER 8 🇮🇳": "8",
+    "INDIAN SERVER 9 🇮🇳": "9"
+}
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+GET COUNTRIES
+Request -> GET
+https://api.otpbuddy.com/stubs/handler_api.php?api_key=$api_key&action=getCountries&server_id=$server_id
+
+Parameters :
+
+api_key : Your API Key
+
+server_id: The server ID (Default value is 1 if not specified).
+
+Server Answer:
+
+BAD_SERVER : Wrong Server ID or Country not Avaliable in the Server
+
+ERROR : Some Error Occured
+
+RESPONSE 
+{
+    "0": "russia",
+    "1": "ukraine",
+    "2": "kazakhstan",
+    "3": "china",
+    ....
+    "22": "iNDIA"
+    etc
+}
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+GET SERVICES
+
+Request -> GET
+https://api.otpbuddy.com/stubs/handler_api.php?api_key=$api_key&action=getServices&country=$country&server_id=$server_id
+
+Parameters :
+
+api_key : Your API Key
+
+country: The Country ID (Default value is 22 (India) if not specified).
+
+server_id: The server ID (Default value is 1 if not specified).
+
+Server Answer:
+
+BAD_SERVER : Wrong Server ID or Country not Avaliable in the Server
+
+ERROR : Some Error Occured
+
+RESPONSE 
+{
+    "bne": "Uber ",
+    "apg": "Mera Gaon ",
+    "oht": "Anyother",
+    "aaz": "Amazon ",
+}
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+GET NUMBER
+
+Request -> GET
+https://api.otpbuddy.com/stubs/handler_api.php?api_key=$api_key&action=getNumber&service=$service&country=$country&server_id=$server_id
+
+Parameters :
+
+api_key : Your API Key
+
+service : Service ID
+
+country: The Country ID (Default value is 22 (India) if not specified).
+
+server_id: The server ID (Default value is 1 if not specified).
+
+Server Answer:
+
+NO_NUMBERS : There are no numbers with the specified parameters, try again later, or change the country.
+
+BAD_SERVICE : Incorrect service id
+
+BAD_SERVER : Incorrect server id
+
+BAD_COUNTRY : Incorrect Country id
+
+NO_BALANCE : Run out of money for API-key
+
+ERROR : Some Error Occured
+
+RESPONSE 
+{
+    ACCESS_NUMBER:687d51e19c5297335bb10161:919067545744
+}
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+GET SMS OR MESSAGE 
+
+Request -> GET
+https://api.otpbuddy.com/stubs/handler_api.php?api_key=$api_key&action=getStatus&id=$id
+
+Parameters :
+
+api_key : Your API Key
+
+id : Activation ID
+Server Answer:
+
+STATUS_WAIT_CODE : Waiting for SMS
+
+STATUS_CANCEL : Activation canceled
+
+STATUS_OK:CODE : Code received (where CODE - activation code)
+
+ERROR : Some Error Occured|
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+CANCEL NUMNBER
+
+Request -> GET
+https://api.otpbuddy.com/stubs/handler_api.php?api_key=$api_key&action=setStatus&id=$id
+
+Parameters :
+
+api_key : Your API Key
+
+id : Activation ID
+
+Server Answer:
+
+ACCESS_CANCEL : Activation canceled
+
+ACCESS_APPROVED : Activation recieved SMS
+
+ACCESS_CANCEL_ALREADY : Activation Already Cancelled
+
+ERROR : Some Error Occured
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+GET PRICE BUY Country
+
+Request -> GET
+https://api.otpbuddy.com/stubs/handler_api.php?api_key=$api_key&action=getPrices&country=$country&server_id=$server_id
+
+Parameters :
+
+api_key : Your API Key
+
+server_id: The server ID (Default value is 1 if not specified).
+
+country: The Country ID (Default value is 22 (India) if not specified).
+
+Server Answer:
+
+BAD_SERVER : Wrong Server ID or Country not Avaliable in the Server
+
+ERROR : Some Error Occured
+
+RESPONSE 
+
+    {
+    "22": {
+        "ahz": {
+            "13.00": "10"
+        },
+        "eht": {
+            "13.00": "582"
+        },
+        ETC
+    }
+    }
